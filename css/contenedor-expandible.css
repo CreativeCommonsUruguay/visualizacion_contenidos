@@ -1,0 +1,16 @@
+p.expand-uno, p.expand-dos, p.expand-tres {
+  margin: 0px;
+}
+
+p.content-uno,  p.content-dos, p.content-tres {
+  display:none;
+  margin: 0px;
+}
+
+.visible {
+  display:inline;
+}
+
+.invisible {
+  display:none;
+}

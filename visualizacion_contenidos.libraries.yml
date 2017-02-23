@@ -1,0 +1,15 @@
+contenedor_expandible:
+  version: 1.x
+  css:
+    theme:
+      css/contenedor-expandible.css: {}
+  js:
+    js/contenedor-expandible.js: {}
+  dependencies:
+    - core/jquery
+
+campos:
+  version: 1.x
+  css:
+    theme:
+      css/campos.css: {}

@@ -1,0 +1,374 @@
+<?php
+
+
+//Define la URL del custom twig para los campos de las fichas de autor y obras.
+function visualizacion_contenidos_theme($existing, $type, $theme, $path) {
+
+  $theme = array();
+
+// Usados en la entidad 'autor'
+  $theme['field__field_nombres'] =
+  $theme['field__field_apellidos'] =
+  $theme['field__field_sexo'] =
+  $theme['field__field_ano_de_nacimiento'] =
+  $theme['field__field_ano_de_muerte'] =
+  $theme['field__field_lugardenacimiento'] =
+  $theme['field__field_disciplinaautoral'] =
+  $theme['field__field_estatusderechos'] =
+  $theme['field__field_seudonimos'] =
+  $theme['field__field_variantes_de_nombre'] =
+    array(
+      'render element' => 'content',
+      'base hook' => 'field',
+      # template file
+      'template' => 'field--node--campos_comunes--autor',
+      # location of the template file
+     'path' => drupal_get_path('module', 'visualizacion_contenidos') . '/templates',
+  );
+
+// Usados en la entidad 'autor'
+  $theme['field__field_fuentes'] =
+  $theme['field__field_enlaces'] =
+  $theme['field__field_notas'] =
+    array(
+      'render element' => 'content',
+      'base hook' => 'field',
+      # template file
+      'template' => 'field--node--campos_expandibles--autor',
+      # location of the template file
+     'path' => drupal_get_path('module', 'visualizacion_contenidos') . '/templates',
+  );
+
+// Usados en la entidad 'libro'
+  $theme['field__field_paginas'] =
+  $theme['field__field_enlaces_al_contenido'] =
+  $theme['field__field_ano_de_publicacion'] =
+  $theme['field__field_numero_de_edicion'] =
+  $theme['field__field_idioma'] =
+  $theme['field__field_formatodearchivo'] =
+  $theme['field__field_temas'] =
+  $theme['field__field_editorial'] =
+  $theme['field__field_coleccion'] =
+  $theme['field__field_lugardepublicacion'] =
+    array(
+      'render element' => 'content',
+      'base hook' => 'field',
+      # template file
+      'template' => 'field--node--campos_comunes--autor',
+      # location of the template file
+     'path' => drupal_get_path('module', 'visualizacion_contenidos') . '/templates',
+  );
+
+  $theme['field__field_portada'] =
+    array(
+      'render element' => 'content',
+      'base hook' => 'field',
+      # template file
+      'template' => 'field--node--portada-embed--autor',
+      # location of the template file
+     'path' => drupal_get_path('module', 'visualizacion_contenidos') . '/templates',
+  );
+
+  return $theme;
+}
+
+
+function componer_fecha($variables, $campo_dia, $campo_mes, $campo_ano) {
+
+    $fechaCompleta = "";
+
+    $dia=$variables['element']['#object']->get($campo_dia)->getValue();
+    if (!empty($dia)) {
+      $fechaCompleta.=$dia['0']['value']."/"; }
+
+    $mes=$variables['element']['#object']->get($campo_mes)->getValue();
+    if (!empty($mes)) {
+      $fechaCompleta.=$mes['0']['value']."/"; }
+
+    $ano=$variables['element']['#object']->get($campo_ano)->getValue();
+    if (!empty($ano)) {
+      $fechaCompleta.=$ano['0']['value']; }
+
+  return $fechaCompleta;
+}
+
+function visualizacion_contenidos_preprocess_field(&$variables, $hook) {
+
+// Oculto campos y etiquetas para dia y mes de nacimiento y muerte.
+  if (($variables['element']['#field_name'] == 'field_dia_de_muerte') or ($variables['element']['#field_name'] == 'field_mes_de_muerte') or ($variables['element']['#field_name'] == 'field_dia_de_nacimiento') or ($variables['element']['#field_name'] == 'field_mes_de_nacimiento')) {
+
+    $fecha = componer_fecha($variables, 'field_dia_de_nacimiento', 'field_mes_de_nacimiento', 'field_ano_de_nacimiento');
+
+    $variables['label_hidden'] = true;
+    $variables['items'] = array ('0' => array ('content' => '', 'attributes' => ''));
+  }
+
+  if ($variables['element']['#field_name'] == 'field_ano_de_nacimiento') {
+
+    $fecha = componer_fecha($variables, 'field_dia_de_nacimiento', 'field_mes_de_nacimiento', 'field_ano_de_nacimiento');
+
+    $variables['label'] = 'Nacimiento';
+    $variables['items'] = array ('0' => array ('content' => $fecha, 'attributes' => ''));
+  }
+
+  if ($variables['element']['#field_name'] == 'field_ano_de_muerte') {
+
+    $fecha = componer_fecha($variables, 'field_dia_de_muerte', 'field_mes_de_muerte', 'field_ano_de_muerte');
+
+    $variables['label'] = 'Muerte';
+    $variables['items'] = array ('0' => array ('content' => $fecha, 'attributes' => ''));
+  }
+
+
+  if ($variables['element']['#field_name'] == 'field_notas') {
+
+    $variables['label'] = 'Notas';
+    $notas = $variables['element']['#object']->get('field_notas')->getValue(); 
+
+    $resultados = array ();
+
+    foreach ($notas as $cadaNota)
+    {
+      $stringSalida = "";
+      $valorNota = $cadaNota['value'];
+
+      if (strpos ($valorNota, "{")===0) { // es una nota con llaves {}
+
+        $llaveinicial = strpos ($valorNota, "{");
+        $llavefinal = strpos ($valorNota, "}");
+        $variable0 = substr ($valorNota, $llaveinicial+1, $llavefinal-$llaveinicial-1);
+        $valorNota = substr ($valorNota, $llavefinal+1);
+
+        $llaveinicial = strpos ($valorNota, "{");
+        $llavefinal = strpos ($valorNota, "}");
+        $variable1 = substr ($valorNota, $llaveinicial+1, $llavefinal-$llaveinicial-1);
+        $valorNota = substr ($valorNota, $llavefinal+1);
+
+        $llaveinicial = strpos ($valorNota, "{");
+        $llavefinal = strpos ($valorNota, "}");
+        $variable2 = substr ($valorNota, $llaveinicial+1, $llavefinal-$llaveinicial-1);
+        $valorNota = substr ($valorNota, $llavefinal+1);
+
+        $llaveinicial = strpos ($valorNota, "{");
+        $llavefinal = strpos ($valorNota, "}");
+        $variable3 = substr ($valorNota, $llaveinicial+1, $llavefinal-$llaveinicial-1);
+
+        switch ($variable0) {
+          case "diferencia":
+
+          // proceso la variable 1
+          if (strpos ($variable1, "web=")===0) {
+            $variable1 = substr ($variable1, 4);
+            $variable1 = "según la página web '".$variable1."': ";
+          }
+
+          if (strpos ($variable1, "libro=")===0) {
+            $variable1 = substr ($variable1, 6);
+
+            $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($variable1);
+            $name = $term->getName();
+
+            $variable1 = "según la fuente bibliográfica '".$name."': ";
+        }
+
+          // proceso la variable 2
+          switch ($variable2) {
+            case "1": $variable2 = "Nombre "; break;
+            case "2": $variable2 = "Fecha de nacimiento "; break;
+            case "3": $variable2 = "Fecha de muerte "; break;
+            case "4": $variable2 = "Lugar de nacimiento "; break;
+          }
+
+          $stringSalida.= $variable2.$variable1.$variable3;
+          break;
+
+
+          case "estimado":
+            // proceso la variable 1
+            if (strpos ($variable1, "web=")===0) {
+              $variable1 = substr ($variable1, 4);
+              $variable1 = "Según la página web '".$variable1."' ";
+            }
+
+            if (strpos ($variable1, "libro=")===0) {
+              $variable1 = substr ($variable1, 6);
+
+              $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($variable1);
+              $name = $term->getName();
+
+              $variable1 = "Según la fuente bibliográfica '".$name."' ";
+
+          }
+          $stringSalida.= $variable1.$variable2." ".$variable3;
+          break;
+
+          case "muerte":
+            // proceso la variable 1
+            if (strpos ($variable1, "web=")===0) {
+              $variable1 = substr ($variable1, 4);
+              $variable1 = "Según la página web '".$variable1."' ";
+            }
+
+            if (strpos ($variable1, "libro=")===0) {
+              $variable1 = substr ($variable1, 6);
+
+              $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($variable1);
+              $name = $term->getName();
+
+              $variable1 = "Según la fuente bibliográfica '".$name."' ";
+
+          }
+          $stringSalida.= $variable1.$variable2." ".$variable3;
+          break;
+          case "otro":
+            // proceso la variable 1
+            if (strpos ($variable1, "web=")===0) {
+              $variable1 = substr ($variable1, 4);
+              $variable1 = "Según la página web '".$variable1."' ";
+              $stringSalida.= $variable1.$variable2;
+            }
+            else {
+              if (strpos ($variable1, "libro=")===0) {
+                $variable1 = substr ($variable1, 6);
+
+                $term = taxonomy_term_load($variable1);
+                $name = $term->name;
+
+                $variable1 = "Según la fuente bibliográfica '".$name."' ";
+                $stringSalida.= $variable1.$variable2;
+              }
+              else {
+                $stringSalida.= $variable1;
+              }
+            }
+          break;
+
+        }
+       
+
+
+    }
+
+    else { // No es una nota con llaves
+      $stringSalida.= $valorNota;
+    }
+
+    array_push ($resultados, array ('content' => $stringSalida, 'attributes' => ''));
+        
+  }
+
+
+
+
+    $variables['items'] = $resultados;
+  }
+
+  if ($variables['element']['#field_name'] == 'field_estatusderechos') {
+
+// Identifico sexo
+    $Sexo = $variables['element']['#object']->get('field_sexo')->getValue(); 
+    $tidSexo = $Sexo['0']['target_id']; 
+
+    $estatusDerechos = $variables['element']['#object']->get('field_estatusderechos')->getValue(); 
+    $tidDerechos = $estatusDerechos['0']['target_id']; // Obtendo el TID del campo derechos.
+
+    $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($tidDerechos); // Cargo la taxonomia correspondiente
+    $tipo = $term->toArray();
+
+    $descripcion = "";
+    switch ($tidSexo) {
+      case 21:
+        $descripcion = $tipo['field_descripcion_h']['0']['value'];
+        break;
+      case 22:
+        $descripcion = $tipo['field_descripcion_m']['0']['value'];
+        break;
+    }
+
+    $variables['items'] = array ('0' => array ('content' => $descripcion, 'attributes' => ''));
+
+  }
+
+  if ($variables['element']['#field_name'] == 'field_disciplinaautoral') { // TODO que el resultado sean entidades en vez de solo texto
+
+    $disciplinas = $variables['element']['#object']->get('field_disciplinaautoral')->getValue(); 
+
+    $arregloDisciplinas = array ();
+
+    foreach ($variables['items'] as $cadavariable) {
+      $termino_entidad = $cadavariable['content']['#options']['entity'];
+      $name = $termino_entidad->getName();
+      $id = $termino_entidad->id();
+
+      $storage = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term');
+      $parents = $storage->loadParents($id);
+
+      if (empty($parents)) {
+        $arregloDisciplinas[$name] = '';
+      } else {
+        $nombrePadre = $parents[key($parents)]->getName(); // Si tiene padre, lo almaceno en el key del padre.
+
+        if (empty($arregloDisciplinas[$nombrePadre])) {
+          $arregloDisciplinas[$nombrePadre]= " (".$name;
+        } else
+          $arregloDisciplinas[$nombrePadre].= ", ".$name;
+        }
+      }
+
+    $resultados = array();
+
+    foreach ($arregloDisciplinas as $clave => $valor) {
+      if (!empty($valor)) { $valor.=")"; }
+      array_push ($resultados, array ('content' => $clave.$valor, 'attributes' => ''));
+    }
+    
+    $variables['items'] = $resultados;
+
+  }
+
+  if ($variables['element']['#field_name'] == 'field_fuentes') {
+
+    $variables['cssId'] = 'uno';
+  }
+
+  if ($variables['element']['#field_name'] == 'field_enlaces') {
+
+    $variables['cssId'] = 'dos';
+  }
+
+  if ($variables['element']['#field_name'] == 'field_notas') {
+
+    $variables['cssId'] = "tres";
+  }
+
+  if ($variables['element']['#field_name'] == 'field_portada') {
+
+    $urls = $variables['element']['#object']->get('field_enlaces_al_contenido')->getValue();
+    $primeraurl = $urls['0']['uri'];
+    
+    $variables['libroEmbed'] = false;
+
+    if (strpos($primeraurl, 'archive.org') !== false) {
+      $arrayurl = explode ("/", $primeraurl);
+      $idarchive = end($arrayurl);
+    }
+
+    if (!empty($idarchive)) {
+      $variables['archiveEmbed'] = "https://archive.org/stream/".$idarchive."?ui=embed";
+      $variables['libroEmbed'] = true;
+    }
+  }
+
+}
+
+function visualizacion_contenidos_preprocess_node(&$variables) {
+  $node = $variables['node'];
+  //check content type
+  if ($node->getType() == 'autor') {
+    $variables['#attached']['library'][] = 'visualizacion_contenidos/contenedor_expandible'; 
+    $variables['#attached']['library'][] = 'visualizacion_contenidos/campos'; 
+  }
+  if ($node->getType() == 'libro') {
+    $variables['#attached']['library'][] = 'visualizacion_contenidos/campos'; 
+  }
+}

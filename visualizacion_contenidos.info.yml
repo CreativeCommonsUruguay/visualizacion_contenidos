@@ -1,0 +1,9 @@
+name: Visualizacion contenidos
+description: Ajusta el formateado de los campos fechas de nacimiento y muerte, los mensajes de estatus de derechos e incorpora los contenedores expandibles para fuentes, enlaces y notas.
+package: AUTORES
+dependencies:
+  - crea_estructura
+  - estatus_derechos
+
+type: module
+core: 8.x

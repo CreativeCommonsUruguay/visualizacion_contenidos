@@ -1,0 +1,47 @@
+.field--label-inline, .field--label-above {
+  padding-top: 5px;
+  border-bottom: 1px solid #d3d3d366;
+  padding-bottom: 5px;
+}
+
+.field--label-inline .field__label, .field--label-inline > .field__item {
+  padding-right: 0.5em;
+}
+
+.field--label-inline .field__label {
+  float: left;
+}
+
+.field__label {
+    font-weight: bold;
+}
+
+.field--label-inline .field__label::after, .field--label-above .field__label::after{
+    content: ':';
+}
+
+
+.field--name-field-estatusderechos {
+  background: azure;
+}
+
+.field--name-field-portada {
+  text-align:center;
+  max-width: 100%;
+}
+
+.field--name-field-portada > img {
+  max-width: 400px;
+  height: auto;
+}
+
+@media (max-width: 440px) {
+  .field--name-field-portada > img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.campo_multiple {
+  margin-right: 10px;
+}
