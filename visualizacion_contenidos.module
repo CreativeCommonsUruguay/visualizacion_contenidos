@@ -21,7 +21,7 @@ function visualizacion_contenidos_theme($existing, $type, $theme, $path) {
       'render element' => 'content',
       'base hook' => 'field',
       # template file
-      'template' => 'field--node--campos_comunes--autor',
+      'template' => 'field--node--campos_comunes--fichas',
       # location of the template file
      'path' => drupal_get_path('module', 'visualizacion_contenidos') . '/templates',
   );
@@ -54,7 +54,7 @@ function visualizacion_contenidos_theme($existing, $type, $theme, $path) {
       'render element' => 'content',
       'base hook' => 'field',
       # template file
-      'template' => 'field--node--campos_comunes--autor',
+      'template' => 'field--node--campos_comunes--fichas',
       # location of the template file
      'path' => drupal_get_path('module', 'visualizacion_contenidos') . '/templates',
   );
@@ -64,7 +64,7 @@ function visualizacion_contenidos_theme($existing, $type, $theme, $path) {
       'render element' => 'content',
       'base hook' => 'field',
       # template file
-      'template' => 'field--node--portada-embed--autor',
+      'template' => 'field--node--portada-embed--libro',
       # location of the template file
      'path' => drupal_get_path('module', 'visualizacion_contenidos') . '/templates',
   );

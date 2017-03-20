@@ -52,15 +52,11 @@
   ]
 %}
 
-{% if libroEmbed %}
-  <iframe src="{{ archiveEmbed }}" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="" style="width: 100%; height: 500px; visibility: visible; margin-top: -7.60001px; margin-bottom: -7.60001px;" width="100%" height="480" frameborder="0"></iframe>
-  {% else %}
-
 {% if label_hidden %}
   {% if multiple %}
     <div{{ attributes.addClass(classes, 'field__items') }}>
       {% for item in items %}
-        <div{{ item.attributes.addClass('field__item') }}>{{ item.content }}</div>
+        <div{{ item.attributes.addClass('field__item', 'campo_multiple')}}>{{ item.content }}</div>
       {% endfor %}
     </div>
   {% else %}
@@ -73,13 +69,14 @@
     <div{{ title_attributes.addClass(title_classes) }}>{{ label }}</div>
     {% if multiple %}
       <div class="field__items">
-    {% endif %}
-    {% for item in items %}
-      <div{{ item.attributes.addClass('field__item') }}>{{ item.content }}</div>
-    {% endfor %}
-    {% if multiple %}
+      {% for item in items %}
+        <div{{ item.attributes.addClass('field__item', 'campo_multiple') }}>{{ item.content }}</div>
+      {% endfor %}
       </div>
+    {% else %}
+      {% for item in items %}
+        <div{{ item.attributes.addClass('field__item') }}>{{ item.content }}</div>
+      {% endfor %}
     {% endif %}
   </div>
-{% endif %}
 {% endif %}

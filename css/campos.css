@@ -2,9 +2,14 @@
   padding-top: 5px;
   border-bottom: 1px solid #d3d3d366;
   padding-bottom: 5px;
+  display: flex;
 }
 
 .field--label-inline .field__label, .field--label-inline > .field__item {
+  padding-right: 0.5em;
+}
+
+.field__label {
   padding-right: 0.5em;
 }
 
@@ -42,6 +47,7 @@
   }
 }
 
-.campo_multiple {
+.field__item.campo_multiple {
   margin-right: 10px;
+  float:left;
 }
