@@ -1,0 +1,30 @@
+{
+    "name": "drupal/visualizacion_contenidos",
+    "description": "Ajusta el formateado de los campos fechas de nacimiento y muerte,
+                    los mensajes de estatus de derechos e incorpora los contenedores
+                    expandibles para fuentes, enlaces y notas.",
+    "type": "drupal-module",
+    "homepage": "https://github.com/CreativeCommonsUruguay/visualizacion_contenidos",
+    "license": "GPL",
+    "authors": [
+      {
+          "name": "Rodrigo",
+          "email": "rbarbano@gmail.com",
+          "role": "Maintainer"
+      },
+      {
+          "name": "Marco",
+          "email": "marcoscalone@gmail.com",
+          "role": "Co-Maintainer"
+      }
+    ],
+    "support": {
+       "issues": "https://github.com/CreativeCommonsUruguay/visualizacion_contenidos/issues",
+       "source": "https://github.com/CreativeCommonsUruguay/visualizacion_contenidos"
+     },
+     "minimum-stability": "dev",
+     "require": {
+       "drupal/crea_estructura": "*",
+       "drupal/estatus_derechos": "*"
+     }
+}
