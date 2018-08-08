@@ -1,0 +1,266 @@
+#block-bannerdelsitio {
+    padding-top:20px;
+}
+
+.copy_credit {
+    padding-top: 15px;
+}
+
+.menu-base-theme {
+    background-color:#ffffff;
+}
+
+  .menu-base-theme a,
+  .menu-base-theme a:hover,
+  .menu-base-theme a:focus,
+  .menu-base-theme a:active,
+  .menu-base-theme a.highlighted {
+    padding: 13px 22px !important;
+  }
+  
+
+  .navbar-toggle 
+  {
+    display: normal !important;
+    }
+
+.lista-obras-portada {
+    text-align:center;
+}
+
+
+#views-exposed-form-listar-libros-page-1 {
+    margin-bottom: 12px;
+}
+
+#views-exposed-form-autores-page-1, #views-exposed-form-listar-libros-page-1 {
+    border: 1px solid lightgray;
+}
+
+#views-exposed-form-autores-page-1 .form--inline > .js-form-item, #views-exposed-form-listar-libros-page-1 .form--inline > .js-form-item {
+  float: left;
+  height: 45px;
+  padding-left: 15px;
+}
+
+#views-exposed-form-autores-page-1 .form--inline > #edit-actions, #views-exposed-form-listar-libros-page-1 .form--inline > #edit-actions {
+  display: flex;
+  width: 100%;
+  padding-top: 25px;
+  padding-left: 15px;
+}
+
+label[for="edit-nacimiento-op"], label[for="edit-muerte-op"], label[for="edit-field-ano-de-publicacion-value-op"]
+{
+    display:none;
+}
+
+label[for="edit-obras-cargadas"]
+{
+    font-weight: 600 !important;
+}
+
+
+.form-item-nacimiento-op:before {
+    content: "Año de nacimiento";
+    font-weight: 600;
+}
+
+.form-item-muerte-op:before {
+    content: "Año de muerte";
+    font-weight: 600;
+}
+.form-item-field-ano-de-publicacion-value-op:before {
+    content: "Año";
+    font-weight: 600;
+}
+
+#edit-field-ano-de-nacimiento-value-value, #edit-field-ano-de-muerte-value-value {
+    width:50px;
+}
+
+/* Modificación de las flechas de selectores */
+select {
+   -webkit-appearance: none; 
+   -moz-appearance: none;
+   appearance: none;       /* remove default arrow */
+   background-image: url('imagenes/flecha-abajo.png');   /* add custom arrow */
+   background-position: 97%;
+   background-repeat: no-repeat;
+}
+
+select::-ms-expand { 
+    display: none; /* hide the default arrow in ie10 and ie11 */
+}
+
+/* ---------------------------------------- */
+
+/* 3 y 4 columnas */
+@media (min-width: 730px) {
+
+
+
+    .form-item-c, .form-item-sexo, .form-item-nacimiento, .form-item-field-estatusderechos-target-id, .form-item-field-disciplinaautoral-target-id, .form-item-obras-cargadas, .form-item-field-autores-name-override, .form-item-title, .form-item-obra {
+        width: 232px;
+    }
+
+    #edit-c, #edit-sexo, #edit-nacimiento, #edit-field-estatusderechos-target-id, #edit-field-disciplinaautoral-target-id, #edit-obras-cargadas, #edit-field-autores-name-override, #edit-title, #edit-obra  {
+        width: 210px;
+    }
+
+/* Restaurar cuando el selector sea una checkbox
+.form-item-obras-cargadas {
+    padding-top:30px;
+}
+*/
+
+    .form-item-nacimiento-op, .form-item-muerte-op, .form-item-field-ano-de-publicacion-value-op {
+        width: 160px;
+    }
+
+    #edit-nacimiento-op, #edit-muerte-op, #edit-field-ano-de-publicacion-value-op {
+        width: 150px;
+        margin-top:5px;
+    }
+
+    #edit-nacimiento-v-value, #edit-muerte-v-value, #edit-field-ano-de-publicacion-value-value {
+        margin-top:7px;
+        width:50px;
+    }
+
+    .form-item-nacimiento-v-value, .form-item-muerte-v-value, .form-item-field-ano-de-publicacion-value-value  {
+        padding-top: 20px;
+        width: 72px;
+    }
+
+}
+
+/* 2 columnas */
+
+@media (max-width: 750px) and (min-width: 500px) {
+
+    .form-item-c, .form-item-sexo, .form-item-nacimiento, .form-item-field-estatusderechos-target-id, .form-item-field-disciplinaautoral-target-id, .form-item-obras-cargadas, .form-item-field-autores-name-override, .form-item-title, .form-item-obra {
+        width: 50%;
+    }
+
+    #edit-c, #edit-sexo, #edit-nacimiento, #edit-field-estatusderechos-target-id, #edit-field-disciplinaautoral-target-id, #edit-obras-cargadas, #edit-field-autores-name-override, #edit-title, #edit-obra  {
+        width: 96%;
+    }
+
+/* Restaurar cuando el selector sea una checkbox
+.form-item-obras-cargadas {
+    padding-top:30px;
+}
+*/
+
+    .form-item-nacimiento-op, .form-item-muerte-op, .form-item-field-ano-de-publicacion-value-op {
+        width: 34%;
+    }
+
+    #edit-nacimiento-op, #edit-muerte-op, #edit-field-ano-de-publicacion-value-op {
+        width: 100%;
+        margin-top:5px;
+    }
+
+    #edit-nacimiento-v-value, #edit-muerte-v-value, #edit-field-ano-de-publicacion-value-value {
+        margin-top:7px;
+        width: 80%;
+    }
+
+    .form-item-nacimiento-v-value, .form-item-muerte-v-value, .form-item-field-ano-de-publicacion-value-value {
+        padding-top: 20px;
+        width: 16%;
+    }
+
+}
+
+/* 1 columna */
+
+@media (max-width: 500px) {
+
+    .form-item-c, .form-item-sexo, .form-item-nacimiento, .form-item-field-estatusderechos-target-id, .form-item-field-disciplinaautoral-target-id, .form-item-obras-cargadas, .form-item-field-autores-name-override, .form-item-title, .form-item-obra {
+        width: 100%;
+    }
+
+    #edit-c, #edit-sexo, #edit-nacimiento, #edit-field-estatusderechos-target-id, #edit-field-disciplinaautoral-target-id, #edit-obras-cargadas, #edit-field-autores-name-override, #edit-title, #edit-obra  {
+        width: 96%;
+    }
+
+/* Restaurar cuando el selector sea una checkbox
+.form-item-obras-cargadas {
+    padding-top:30px;
+}
+*/
+
+    .form-item-nacimiento-op, .form-item-muerte-op, .form-item-field-ano-de-publicacion-value-op {
+        width: 70%;
+    }
+
+    #edit-nacimiento-op, #edit-muerte-op, #edit-field-ano-de-publicacion-value-op {
+        width: 100%;
+        margin-top:5px;
+    }
+
+    #edit-nacimiento-v-value, #edit-muerte-v-value, #edit-field-ano-de-publicacion-value-value {
+        margin-top:7px;
+        width: 100%;
+    }
+
+    .form-item-nacimiento-v-value, .form-item-muerte-v-value, .form-item-field-ano-de-publicacion-value-value {
+        padding-top: 20px;
+        width: 25%;
+    }
+
+}
+
+.tabla-autores-destacados .views-field-field-portada {
+  border: 0px;
+}
+
+.tabla-autores-destacados .views-field-field-descripcion .field-content a > img {
+  float: left;
+  margin: 0px 10px 0px 0px;
+}
+
+.tabla-autores-destacados .views-field-field-portada {
+  padding: 5px 5px 25px 5px;
+}
+
+.tabla-autores-destacados .views-field-field-portada a {
+  font-size: 1.2em;
+}
+
+.tabla-autores-destacados .views-field-field-portada a > img  {
+  float: left;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+img {
+  height: auto;
+}
+
+.cols-2, .cols-3, .cols-4, .cols-5, .cols-6 {
+    width:100%;
+}
+
+input, button, select, textarea {
+  background-color: white;
+}
+
+#edit-field-dia-de-nacimiento-wrapper, #edit-field-mes-de-nacimiento-wrapper, #edit-field-ano-de-nacimiento-wrapper, #edit-field-dia-de-muerte-wrapper, #edit-field-mes-de-muerte-wrapper, #edit-field-ano-de-muerte-wrapper {
+  display: inline-block;
+}
+
+.subtitulo {
+    font-size: small;
+}
+
+.cada-obra > li {
+  width: 20%;
+  padding: 10px;
+  border: 1px dotted lightgray;
+  margin: 10px;
+  display: inline-block;
+  vertical-align: top;
+}

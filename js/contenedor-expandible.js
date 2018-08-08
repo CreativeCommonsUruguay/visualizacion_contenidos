@@ -1,43 +1,20 @@
 ;(function($){
 
-  $(window).load(function(){
-    $('.expand-uno').click(function(evt){
-      $('.content-uno').slideToggle('fast');
-      evt.preventDefault();
+  $(window).on('load', function () {
 
-      if ($( "#mostrar-uno" ).hasClass( "invisible" )) {
-          $( "#mostrar-uno" ).removeClass("invisible").addClass("visible");
-          $( "#ocultar-uno" ).removeClass("visible").addClass("invisible");
-      } else {
-          $( "#mostrar-uno" ).removeClass("visible").addClass("invisible");
-          $( "#ocultar-uno" ).removeClass("invisible").addClass("visible");
-      }
+    $( "#accordion_field_fuentes" ).accordion({
+  active: false,
+  collapsible: true,
+    });
+  
+    $( "#accordion_field_enlaces" ).accordion({
+  active: false,
+  collapsible: true,
     });
 
-    $('.expand-dos').click(function(evt){
-      $('.content-dos').slideToggle('fast');
-      evt.preventDefault();
-
-      if ($( "#mostrar-dos" ).hasClass( "invisible" )) {
-          $( "#mostrar-dos" ).removeClass("invisible").addClass("visible");
-          $( "#ocultar-dos" ).removeClass("visible").addClass("invisible");
-      } else {
-          $( "#mostrar-dos" ).removeClass("visible").addClass("invisible");
-          $( "#ocultar-dos" ).removeClass("invisible").addClass("visible");
-      }
-    });
-
-    $('.expand-tres').click(function(evt){
-      $('.content-tres').slideToggle('fast');
-      evt.preventDefault();
-
-      if ($( "#mostrar-tres" ).hasClass( "invisible" )) {
-          $( "#mostrar-tres" ).removeClass("invisible").addClass("visible");
-          $( "#ocultar-tres" ).removeClass("visible").addClass("invisible");
-      } else {
-          $( "#mostrar-tres" ).removeClass("visible").addClass("invisible");
-          $( "#ocultar-tres" ).removeClass("invisible").addClass("visible");
-      }
+    $( "#accordion_field_notas" ).accordion({
+  active: false,
+  collapsible: true,
     });
 
   });

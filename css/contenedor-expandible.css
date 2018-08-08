@@ -1,16 +1,10 @@
-p.expand-uno, p.expand-dos, p.expand-tres {
-  margin: 0px;
+.field_wrapper_accordion {
+    width:100%;
 }
 
-p.content-uno,  p.content-dos, p.content-tres {
-  display:none;
-  margin: 0px;
-}
-
-.visible {
-  display:inline;
-}
-
-.invisible {
-  display:none;
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
+    border: 1px solid var(--color-uno);
+    background: var(--color-tres);
+    font-weight: normal;
+    color: #000000;
 }

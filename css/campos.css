@@ -26,8 +26,12 @@
 }
 
 
-.field--name-field-estatusderechos {
-  background: azure;
+.field--name-field-estatusderechos, .field--name-field-derechosobra {
+  display: inline-block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+
 }
 
 .field--name-field-portada {
@@ -36,8 +40,10 @@
 }
 
 .field--name-field-portada > img {
-  max-width: 400px;
-  height: auto;
+/*  max-width: 400px;*/
+  max-height:600px;
+  width:auto;
+/*  height: auto; */
 }
 
 @media (max-width: 440px) {

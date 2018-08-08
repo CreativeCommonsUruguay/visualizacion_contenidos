@@ -7,9 +7,22 @@ contenedor_expandible:
     js/contenedor-expandible.js: {}
   dependencies:
     - core/jquery
-
+    - core/jquery.ui.accordion
+    
 campos:
   version: 1.x
   css:
     theme:
       css/campos.css: {}
+      
+ficha-autor:
+  version: 1.x
+  css:
+    theme:
+      css/ficha-autor.css: {}
+      
+estilos_comunes:
+  version: 1.x
+  css:
+    base:
+      css/sitio.css: {}

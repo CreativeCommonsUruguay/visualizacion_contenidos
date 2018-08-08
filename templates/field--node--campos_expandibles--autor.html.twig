@@ -52,18 +52,14 @@
   ]
 %}
 
-  <div{{ attributes.addClass(classes) }}>
-    
-    {% if multiple %}
-      <div class="field__items">
-    {% endif %}
-    <p class="expand-{{ cssId }}"><a href="#" class="label-link"><span class="visible" id="mostrar-{{ cssId }}">{{ label }} +</span><span class="invisible" id="ocultar-{{ cssId }}">{{ label }} -</span></a></p>
-    <p class="content-{{ cssId }}">
-    {% for item in items %}
+<div{{ attributes.addClass(classes) }}>
+    <div class="field_wrapper_accordion">
+        <div id="accordion_{{ field_name }}">
+            <h3>{{ label }}</h3>
+            <p>{% for item in items %}
       &nbsp; <i class="fa fa-square" style="color:#1abc9c; font-size:0.7em;">&nbsp;</i> {{ item.content }} </br>
-    {% endfor %}
-    </p>
-    {% if multiple %}
-      </div>
-    {% endif %}
-  </div>
+                {% endfor %}
+            </p>
+        </div>
+    </div>
+</div>

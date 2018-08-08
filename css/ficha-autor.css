@@ -1,0 +1,25 @@
+.libros-creados-autor {
+  border: 1px solid lightgrey;
+  float: left;
+  padding: 10px;
+  margin: 10px;
+  width: 200px;
+  height: 250px;
+}
+
+.views-field-field-portada {
+    text-align: center;
+}
+
+.views-field-field-portada .field-content a img {
+  max-height: 190px;
+  width: auto;
+}
+
+.cols-4, .cols-3 {
+    width:100%;
+}
+
+.lista-obras-portada {
+    min-width: 100px;
+}

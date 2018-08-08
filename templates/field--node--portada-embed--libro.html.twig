@@ -54,6 +54,15 @@
 
 {% if libroEmbed %}
   <iframe src="{{ archiveEmbed }}" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="" style="width: 100%; height: 500px; visibility: visible; margin-top: -7.60001px; margin-bottom: -7.60001px;" width="100%" height="480" frameborder="0"></iframe>
+
+{% elseif tieneLinkMaxRes %}
+        {% for item in items %}
+          <a href={{ linkMaxRes }} target="_blank"><div{{ attributes.addClass(classes, 'field__item') }}>{{ item.content }}</div></a>
+        {% endfor %}
+
+{% elseif videoEmbed %}
+  <iframe src="{{ linkVideoEmbed }}" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="" style="width: 100%; height: 500px; visibility: visible; margin-top: -7.60001px; margin-bottom: -7.60001px;" width="100%" height="480" frameborder="0"></iframe>
+
   {% else %}
 
     {% if label_hidden %}
@@ -82,4 +91,5 @@
         {% endif %}
       </div>
     {% endif %}
+
 {% endif %}

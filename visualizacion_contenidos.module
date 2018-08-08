@@ -1,5 +1,6 @@
 <?php
 
+use Drupal\taxonomy\Entity\Term;
 
 //Define la URL del custom twig para los campos de las fichas de autor y obras.
 function visualizacion_contenidos_theme($existing, $type, $theme, $path) {
@@ -13,6 +14,7 @@ function visualizacion_contenidos_theme($existing, $type, $theme, $path) {
   $theme['field__field_ano_de_nacimiento'] =
   $theme['field__field_ano_de_muerte'] =
   $theme['field__field_lugardenacimiento'] =
+  $theme['field__field_lugardemuerte'] =
   $theme['field__field_disciplinaautoral'] =
   $theme['field__field_estatusderechos'] =
   $theme['field__field_seudonimos'] =
@@ -39,17 +41,39 @@ function visualizacion_contenidos_theme($existing, $type, $theme, $path) {
      'path' => drupal_get_path('module', 'visualizacion_contenidos') . '/templates',
   );
 
-// Usados en la entidad 'libro'
+// Usados en las entidades de obras
   $theme['field__field_paginas'] =
-  $theme['field__field_enlaces_al_contenido'] =
   $theme['field__field_ano_de_publicacion'] =
   $theme['field__field_numero_de_edicion'] =
   $theme['field__field_idioma'] =
   $theme['field__field_formatodearchivo'] =
+  $theme['field__field_subtitulo'] =
   $theme['field__field_temas'] =
   $theme['field__field_editorial'] =
   $theme['field__field_coleccion'] =
   $theme['field__field_lugardepublicacion'] =
+  $theme['field__field_imprenta'] =
+  $theme['field__field_isbn'] =
+  $theme['field__field_origen'] =
+  $theme['field__field_tamano_alto'] =
+  $theme['field__field_tamano_ancho'] =
+  $theme['field__field_tamano_profundidad'] =
+  $theme['field__field_ubicacion'] =
+  $theme['field__field_fotografo'] =
+  $theme['field__field_materiales'] =
+  $theme['field__field_tipo_de_obra_visual'] =
+  $theme['field__field_tipo_de_obra'] =
+  $theme['field__field_calidad_de_digitalizacion'] =
+  $theme['field__field_autores'] =
+  $theme['field__field_derechosobra'] =
+  $theme['field__field_duracion'] =  
+  $theme['field__field_productora'] =
+  $theme['field__field_discografica'] =
+  $theme['field__field_matriz'] =
+  $theme['field__field_interprete'] =
+  $theme['field__field_interprete'] =
+  $theme['field__field_tema_audio'] =  
+  $theme['field__field_soporte'] =  
     array(
       'render element' => 'content',
       'base hook' => 'field',
@@ -59,6 +83,16 @@ function visualizacion_contenidos_theme($existing, $type, $theme, $path) {
      'path' => drupal_get_path('module', 'visualizacion_contenidos') . '/templates',
   );
 
+  $theme['field__field_enlaces_al_contenido'] =
+    array(
+      'render element' => 'content',
+      'base hook' => 'field',
+      # template file
+      'template' => 'field--node--campos_enlaces_contenidos--fichas',
+      # location of the template file
+     'path' => drupal_get_path('module', 'visualizacion_contenidos') . '/templates',
+  );
+  
   $theme['field__field_portada'] =
     array(
       'render element' => 'content',
@@ -105,20 +139,40 @@ function visualizacion_contenidos_preprocess_field(&$variables, $hook) {
 
   if ($variables['element']['#field_name'] == 'field_ano_de_nacimiento') {
 
-    $fecha = componer_fecha($variables, 'field_dia_de_nacimiento', 'field_mes_de_nacimiento', 'field_ano_de_nacimiento');
-
-    $variables['label'] = 'Nacimiento';
-    $variables['items'] = array ('0' => array ('content' => $fecha, 'attributes' => ''));
+    $variables['label'] = 'Fecha de nacimiento';
+    
+    $mesnacimiento = $variables['element']['#object']->get('field_mes_de_nacimiento')->getValue();
+    
+    if (!empty($mesnacimiento)) {
+        $fecha = componer_fecha($variables, 'field_dia_de_nacimiento', 'field_mes_de_nacimiento', 'field_ano_de_nacimiento');
+        $variables['items'] = array ('0' => array ('content' => $fecha, 'attributes' => ''));
+    }
+        
   }
 
   if ($variables['element']['#field_name'] == 'field_ano_de_muerte') {
 
-    $fecha = componer_fecha($variables, 'field_dia_de_muerte', 'field_mes_de_muerte', 'field_ano_de_muerte');
+    $variables['label'] = 'Fecha de muerte';
+    
+    $mesmuerte = $variables['element']['#object']->get('field_mes_de_muerte')->getValue();
+    
+    if (!empty($mesmuerte)) {
+        $fecha = componer_fecha($variables, 'field_dia_de_muerte', 'field_mes_de_muerte', 'field_ano_de_muerte');
+        $variables['items'] = array ('0' => array ('content' => $fecha, 'attributes' => ''));
+    }
 
-    $variables['label'] = 'Muerte';
-    $variables['items'] = array ('0' => array ('content' => $fecha, 'attributes' => ''));
   }
 
+  if ($variables['element']['#field_name'] == 'field_ano_de_publicacion') {
+
+    $anopublicacionValor = $variables['element']['#object']->get('field_ano_de_publicacion')->getValue();
+
+    if (isset($anopublicacionValor['1']['value'])) {
+        $anopublicacion = $anopublicacionValor['0']['value']."-".$anopublicacionValor['1']['value'];
+    
+        $variables['items'] = array ('0' => array ('content' => $anopublicacion, 'attributes' => ''));
+    }
+  }
 
   if ($variables['element']['#field_name'] == 'field_notas') {
 
@@ -159,24 +213,24 @@ function visualizacion_contenidos_preprocess_field(&$variables, $hook) {
           // proceso la variable 1
           if (strpos ($variable1, "web=")===0) {
             $variable1 = substr ($variable1, 4);
-            $variable1 = "según la página web '".$variable1."': ";
+            $variable1 = t('según la página web')." '".$variable1."' :";
           }
 
           if (strpos ($variable1, "libro=")===0) {
             $variable1 = substr ($variable1, 6);
 
             $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($variable1);
-            $name = $term->getName();
+            if (!empty($term)) { $name = $term->getName(); } else { $name = ""; }
 
-            $variable1 = "según la fuente bibliográfica '".$name."': ";
+            $variable1 = t('según la fuente bibliográfica')." '".htmlspecialchars($name)."' :";
         }
 
           // proceso la variable 2
           switch ($variable2) {
-            case "1": $variable2 = "Nombre "; break;
-            case "2": $variable2 = "Fecha de nacimiento "; break;
-            case "3": $variable2 = "Fecha de muerte "; break;
-            case "4": $variable2 = "Lugar de nacimiento "; break;
+            case "1": $variable2 = t('Nombre')." "; break;
+            case "2": $variable2 = t('Fecha de nacimiento')." "; break;
+            case "3": $variable2 = t('Fecha de muerte')." "; break;
+            case "4": $variable2 = t('Lugar de nacimiento')." "; break;
           }
 
           $stringSalida.= $variable2.$variable1.$variable3;
@@ -187,16 +241,16 @@ function visualizacion_contenidos_preprocess_field(&$variables, $hook) {
             // proceso la variable 1
             if (strpos ($variable1, "web=")===0) {
               $variable1 = substr ($variable1, 4);
-              $variable1 = "Según la página web '".$variable1."' ";
+              $variable1 = t('según la página web')." '".$variable1."' ";
             }
 
             if (strpos ($variable1, "libro=")===0) {
               $variable1 = substr ($variable1, 6);
 
               $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($variable1);
-              $name = $term->getName();
+                if (!empty($term)) { $name = $term->getName(); } else { $name = ""; }
 
-              $variable1 = "Según la fuente bibliográfica '".$name."' ";
+              $variable1 = t('según la fuente bibliográfica')." '".htmlspecialchars($name)."' ";
 
           }
           $stringSalida.= $variable1.$variable2." ".$variable3;
@@ -206,16 +260,16 @@ function visualizacion_contenidos_preprocess_field(&$variables, $hook) {
             // proceso la variable 1
             if (strpos ($variable1, "web=")===0) {
               $variable1 = substr ($variable1, 4);
-              $variable1 = "Según la página web '".$variable1."' ";
+              $variable1 = t('según la página web')." '".$variable1."' ";
             }
 
             if (strpos ($variable1, "libro=")===0) {
               $variable1 = substr ($variable1, 6);
 
               $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($variable1);
-              $name = $term->getName();
+                if (!empty($term)) { $name = $term->getName(); } else { $name = ""; }
 
-              $variable1 = "Según la fuente bibliográfica '".$name."' ";
+              $variable1 = t('según la fuente bibliográfica')." '".htmlspecialchars($name)."' ";
 
           }
           $stringSalida.= $variable1.$variable2." ".$variable3;
@@ -224,7 +278,7 @@ function visualizacion_contenidos_preprocess_field(&$variables, $hook) {
             // proceso la variable 1
             if (strpos ($variable1, "web=")===0) {
               $variable1 = substr ($variable1, 4);
-              $variable1 = "Según la página web '".$variable1."' ";
+              $variable1 = t('según la página web')." '".$variable1."' ";
               $stringSalida.= $variable1.$variable2;
             }
             else {
@@ -232,9 +286,9 @@ function visualizacion_contenidos_preprocess_field(&$variables, $hook) {
                 $variable1 = substr ($variable1, 6);
 
                 $term = taxonomy_term_load($variable1);
-                $name = $term->name;
+                if (!empty($term)) { $name = $term->getName(); } else { $name = ""; }
 
-                $variable1 = "Según la fuente bibliográfica '".$name."' ";
+                $variable1 = t('según la fuente bibliográfica')." '".htmlspecialchars($name)."' ";
                 $stringSalida.= $variable1.$variable2;
               }
               else {
@@ -270,7 +324,7 @@ function visualizacion_contenidos_preprocess_field(&$variables, $hook) {
     $tidSexo = $Sexo['0']['target_id']; 
 
     $estatusDerechos = $variables['element']['#object']->get('field_estatusderechos')->getValue(); 
-    $tidDerechos = $estatusDerechos['0']['target_id']; // Obtendo el TID del campo derechos.
+    $tidDerechos = $estatusDerechos['0']['target_id']; // Obtengo el TID del campo derechos.
 
     $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($tidDerechos); // Cargo la taxonomia correspondiente
     $tipo = $term->toArray();
@@ -288,6 +342,21 @@ function visualizacion_contenidos_preprocess_field(&$variables, $hook) {
     $variables['items'] = array ('0' => array ('content' => $descripcion, 'attributes' => ''));
 
   }
+  
+  if ($variables['element']['#field_name'] == 'field_derechosobra') {
+
+    $estatusDerechos = $variables['element']['#object']->get('field_derechosobra')->getValue(); 
+    $tidDerechos = $estatusDerechos['0']['target_id']; // Obtengo el TID del campo derechos.
+
+    $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($tidDerechos); // Cargo la taxonomia correspondiente
+    $tipo = $term->toArray();
+
+    $descripcion = $tipo['description']['0']['value'];
+
+
+    $variables['items'] = array ('0' => array ('content' => Array ( '#type' => 'processed_text', '#text' => $descripcion, '#format' => 'basic_html', '#langcode' => 'es' ), 'attributes' => ''));
+  }
+
 
   if ($variables['element']['#field_name'] == 'field_disciplinaautoral') { // TODO que el resultado sean entidades en vez de solo texto
 
@@ -302,11 +371,13 @@ function visualizacion_contenidos_preprocess_field(&$variables, $hook) {
 
       $storage = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term');
       $parents = $storage->loadParents($id);
+      $allParents =  $storage->loadAllParents($id);
 
       if (empty($parents)) {
         $arregloDisciplinas[$name] = '';
       } else {
-        $nombrePadre = $parents[key($parents)]->getName(); // Si tiene padre, lo almaceno en el key del padre.
+        end ($allParents);
+        $nombrePadre = $allParents[key($allParents)]->getName(); // Si tiene padre, lo almaceno en el key del padre.
 
         if (empty($arregloDisciplinas[$nombrePadre])) {
           $arregloDisciplinas[$nombrePadre]= " (".$name;
@@ -343,32 +414,185 @@ function visualizacion_contenidos_preprocess_field(&$variables, $hook) {
 
   if ($variables['element']['#field_name'] == 'field_portada') {
 
-    $urls = $variables['element']['#object']->get('field_enlaces_al_contenido')->getValue();
-    $primeraurl = $urls['0']['uri'];
-    
-    $variables['libroEmbed'] = false;
 
-    if (strpos($primeraurl, 'archive.org') !== false) {
-      $arrayurl = explode ("/", $primeraurl);
-      $idarchive = end($arrayurl);
+    $tipo = $variables['element']['#bundle'];
+    $tipo_vista = $variables['element']['#view_mode'];
+
+    if (($tipo == 'libro') && ($tipo_vista == 'full')) {
+      $urls = $variables['element']['#object']->get('field_enlaces_al_contenido')->getValue();
+      $primeraurl = $urls['0']['uri'];
+
+      $variables['libroEmbed'] = false;
+
+      if (strpos($primeraurl, 'archive.org') !== false) {
+        $arrayurl = explode ("/", $primeraurl);
+        $idarchive = end($arrayurl);
+      }
+
+      if (!empty($idarchive)) {
+        $variables['archiveEmbed'] = "https://archive.org/stream/".$idarchive."?ui=embed";
+
+        $variables['libroEmbed'] = true;
+      }
     }
 
-    if (!empty($idarchive)) {
-      $variables['archiveEmbed'] = "https://archive.org/stream/".$idarchive."?ui=embed";
-      $variables['libroEmbed'] = true;
+    if ($tipo == 'obra_visual') {
+      $urls = $variables['element']['#object']->get('field_enlaces_al_contenido')->getValue();
+      if (!empty($urls)) {
+          $variables['tieneLinkMaxRes'] = true;
+          $variables['linkMaxRes'] = $urls['0']['uri']; // Enlaza a la primera URL
+      } else { $variables['linkMaxRes'] = false; }
+
     }
+
+    if ($tipo == 'obra_audiovisual') {
+      $urls = $variables['element']['#object']->get('field_enlaces_al_contenido')->getValue();
+      $primeraurl = $urls['0']['uri'];
+      
+      $variables['videoEmbed'] = true;
+      $variables['linkVideoEmbed'] = $primeraurl;
+  }
+  
   }
 
+  if ($variables['element']['#field_name'] == 'field_enlaces_al_contenido') {
+
+
+    $tipo = $variables['element']['#bundle'];
+
+    if (($tipo == 'libro') || ($tipo == 'obra_audiovisual') || ($tipo == 'obra_de_audio')) {
+      $urls = $variables['element']['#object']->get('field_enlaces_al_contenido')->getValue();
+      $primeraurl = $urls['0']['uri'];
+
+      $variables['libroEmbed'] = false;
+
+      if (strpos($primeraurl, 'archive.org') !== false) {
+        $arrayurl = explode ("/", $primeraurl);
+        $idarchive = end($arrayurl);
+      }
+
+      if (!empty($idarchive)) {
+
+/* Obtiene los links a los distintos formatos disponibles en internet archive */
+
+        $linkXml = "https://archive.org/download/".$idarchive."/".$idarchive."_files.xml";
+
+        $file = file_get_contents($linkXml, FILE_USE_INCLUDE_PATH);
+        $xml = new \SimpleXMLElement($file);
+        
+        foreach ($xml->file as $cadaFile)
+        {
+            
+            $fileFormat = $cadaFile->format;
+            $FileNombre = $cadaFile['name'];
+            $urlPublic = file_create_url('public://');
+
+            switch ($fileFormat) {
+                case 'Text PDF':
+                    $variables['linkPDF'] = "https://archive.org/download/".$idarchive."/".$FileNombre;
+                break;
+                case 'Standard LuraTech PDF':
+                    $variables['linkPDF'] = "https://archive.org/download/".$idarchive."/".$FileNombre;
+                break;
+                case 'Image Container PDF':
+                    $variables['linkPDF'] = "https://archive.org/download/".$idarchive."/".$FileNombre;
+                break;
+                case 'DjVuTXT':
+                    $variables['linkTXT'] = "https://archive.org/stream/".$idarchive."/".$FileNombre;
+                break;
+                case 'MPEG4':
+                    $variables['linkMPEG'] = "https://archive.org/download/".$idarchive."/".$FileNombre;
+                break;
+                case 'Ogg Video':
+                    $variables['linkOGV'] = "https://archive.org/download/".$idarchive."/".$FileNombre;
+                break;
+
+                case '24bit Flac':
+                    $variables['linkFLAC'] = "https://archive.org/download/".$idarchive."/".$FileNombre;
+                break;
+                case 'VBR MP3':
+                    $variables['linkMP3'] = "https://archive.org/download/".$idarchive."/".$FileNombre;
+                break;
+                case 'Ogg Vorbis':
+                    $variables['linkOGG'] = "https://archive.org/download/".$idarchive."/".$FileNombre;
+                break;
+                case 'Archive BitTorrent':
+                    $variables['linkTorrent'] = "https://archive.org/download/".$idarchive."/".$FileNombre;
+                break;
+            }
+        }
+
+        $variables['libroEmbed'] = true;
+      }
+    }
+  
+  }
 }
+
+
 
 function visualizacion_contenidos_preprocess_node(&$variables) {
   $node = $variables['node'];
   //check content type
   if ($node->getType() == 'autor') {
     $variables['#attached']['library'][] = 'visualizacion_contenidos/contenedor_expandible'; 
+    $variables['#attached']['library'][] = 'visualizacion_contenidos/campos';
+    $variables['#attached']['library'][] = 'visualizacion_contenidos/ficha-autor';
+  }
+
+  if (($node->getType() == 'libro') || ($node->getType() == 'obra_visual') || ($node->getType() == 'obra_audiovisual') || ($node->getType() == 'obra_de_audio')) {
     $variables['#attached']['library'][] = 'visualizacion_contenidos/campos'; 
   }
-  if ($node->getType() == 'libro') {
-    $variables['#attached']['library'][] = 'visualizacion_contenidos/campos'; 
+
+}
+
+function visualizacion_contenidos_preprocess_page(&$variables) {
+  // Add page preprocess functions here.
+
+  $variables['#attached']['library'][] = 'visualizacion_contenidos/estilos_comunes';
+  
+}
+
+
+function visualizacion_contenidos_form_alter (&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  // Modification for the form with the given form ID goes here. For example, if
+  // FORM_ID is "user_register_form" this code would run only on the user
+  // registration form.
+
+  // Add a checkbox to registration form about agreeing to terms of use.
+
+
+
+  if ($form['#id'] == 'views-exposed-form-autores-page-1') {
+
+
+
+// dpm($form['obras_cargadas']);
+
+/* comentado provisoriamete hasta solucionar bug - Marco 20/08/2017
+  $form['obras_cargadas'] = [
+    '#type' => 'checkbox',
+    '#default_value' => 'All',
+    '#return_value' => '1',
+    '#required' => FALSE,
+  ];
+*/
+// dpm($form['obras_cargadas']);
+
+  $form['nacimiento_op']['#options'] = Array
+        (
+            '<' => t('Antes de'),
+            '=' => t('En'),
+            '>' => t('Después de'),
+        );
+
+  $form['muerte_op']['#options'] = Array
+        (
+            '<' => t('Antes de'),
+            '=' => t('En'),
+            '>' => t('Después de'),
+        );
+
   }
+
 }
